@@ -192,6 +192,7 @@ sub checkssh{
     my $registrationemail = shift;
     unless (-e "id_rsa"){
         system("ssh-keygen -q -P '' -t rsa -f ./id_rsa");
+		chmod 600, "id_rsa";
     }
     $repourl =~ /^(.*?):(.*)$/;
     my $user = $1;
