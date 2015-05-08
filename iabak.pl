@@ -52,7 +52,7 @@ EOF
     
     unless( -e "NOMORE"){
         while(stillhavespace()){
-            my $newShard= randnew();
+            my $newShard= randomnew();
             unless(length $newShard == 0){
                 print "\nLooks like you still have free disk space, so I will continue to fill it up!\n(ctrl-c and touch NOMORE to prevent this behavior..)\n\n";
                 checkoutshard($newShard);
@@ -382,7 +382,6 @@ sub register {
     $q->param("pubkey", $pubkey);
     my $url=$q->self_url;
     $url=~s!^http://localhost!http://iabak.archiveteam.org/cgi-bin/register.cgi!;
-    print Dumper $url;
     my $result = get($url);
     # TODO: check the restult to make sure that the registration succeeded
 }
