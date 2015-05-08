@@ -26,15 +26,14 @@ $ENV{'PATH'} = getcwd() . ($^O =~/linux/ ? "/git-annex.linux:" : "/git-annex.osx
 my $NEED_PRERELEASE=0;
 my $NUMCOPIES=4;
 
-system('git pull origin || true');
+print `git pull origin`;
 my @curShardDirs = sharddir();
 if( ~~ @curShardDirs != 0){
 	unless(-e 'iabak-cronjob.log' ){
 		print <<EOF
-		
+
 ** Reminder: You should set up a cron job to run iabak-cronjob periodically!
              (See README.md for details)
-             
 EOF
 	}
 	
@@ -159,19 +158,19 @@ sub checkoutshard{
         print "Shard not found in repolist";
         return;
     }
-    print "\n\n$l\n";
+    chomp $l;    
     (my $localdir, my $repourl, my $status) = split " ", $l;
-    system("git init $localdir");
+    print `git init $localdir`;
     chdir($localdir);
     my $username = $ENV{USER};
-    system("git config user.name $username ; git config user.email $username\@iabak ; git config gc.auto 0 ; git annex init");
+	system("git config user.name $username ; git config user.email $username\@iabak ; git config gc.auto 0 ; git annex init");
     my $uuid=`git config annex.uuid`;
     chdir("..");
     checkssh($repourl, $uuid, $registrationemail);
     chdir($localdir);
     copy "../id_rsa", ".git/annex/id_rsa";
     copy "../id_rsa.pub", ".git/annex/id_rsa.pub";
-    system("git remote add origin $repourl ; git config remove.origin.annex-ssh-options \"-i .git/annex/id_rsa\" ; git annex sync");
+    system("git remote add origin $repourl ; git config remote.origin.annex-ssh-options \"-i .git/annex/id_rsa\" ; git annex sync");
     chdir($top);
     if($prevshard){
         for(qw (annex.diskreserve annex.web-options)){
@@ -192,7 +191,7 @@ sub checkssh{
     my $uuid = shift;  # generated id
     my $registrationemail = shift;
     unless (-e "id_rsa"){
-        system("ssh-keygen -q -P \"\" -t rsa -f ./id_rsa");
+        system("ssh-keygen -q -P '' -t rsa -f ./id_rsa");
     }
     $repourl =~ /^(.*?):(.*)$/;
     my $user = $1;
@@ -200,8 +199,6 @@ sub checkssh{
     print "Checking ssh to server at $repourl...\n";
     unless(`ssh -i id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no "$user" git-annex-shell -c configlist $dir`){
         print "Seem you're not set up yet for access to $repourl yet. Let's fix that..\n";
-# TODO        
-        my @cmd;
         register($dir, $uuid, $registrationemail);
         sleep 1;  #replace with 1
         get("http://iabak.archiveteam.org/cgi-bin/pushme.cgi");
