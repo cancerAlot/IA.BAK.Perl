@@ -311,7 +311,11 @@ sub sharddir {
         push( @shards, "$_" ) if ( -d $_ );
     }
 
+<<<<<<< HEAD
 # sort takes a method for comparing $a and $b - ctime is compared and youngest directory comes first
+=======
+# sorts takes a method for comparing $a and $b - ctime is compared and youngest directory comes first
+>>>>>>> refs/remotes/origin/master
     return ( sort { ( ( stat($a) )[10] ) > ( ( stat($b) )[10] ) } @shards );
 }
 
