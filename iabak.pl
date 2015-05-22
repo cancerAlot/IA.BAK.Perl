@@ -232,11 +232,10 @@ sub randomnew {
     my @repos = read_file("repolist");
     my @active = grep { /active$/ } @repos;
     @active = @active ? @active : grep { /reserve$/ } @repos;
-    print "active: \n";
-    print Dumper @active;
     my @existRepos;
+    print Dumper @active;
     for (@active) {
-        m/(.*?) /;
+        m/(.*?)/;
         push @existRepos, $1 unless -d $1;
     }
     print "Repos: \n";
