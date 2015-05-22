@@ -231,7 +231,9 @@ sub checkssh {
 sub randomnew {
     my @repos = read_file("repolist");
     my @active = grep { /active$/ } @repos;
-    @active = (@active) ? @active : grep { /reserve$/ } @repos;
+    @active = @active ? @active : grep { /reserve$/ } @repos;
+    print "active: \n";
+    print Dumper @active;
     my @existRepos;
     for (@active) {
         m/(.*?) /;
