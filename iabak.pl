@@ -235,7 +235,7 @@ sub randomnew {
     my @existRepos;
     print Dumper @active;
     for (@active) {
-        m/(.*?)/;
+        m/(.*?) /;
         push @existRepos, $1 unless -d $1;
     }
     print "Repos: \n";
