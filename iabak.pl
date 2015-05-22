@@ -233,9 +233,9 @@ sub randomnew {
     my @active = grep { /active$/ } @repos;
     @active = @active ? @active : grep { /reserve$/ } @repos;
     my @existRepos;
-    print Dumper @active;
     for (@active) {
         m/(.*?) /;
+        print "dollar1: $1\n";
         push @existRepos, $1 unless -d $1;
     }
     print "Repos: \n";
