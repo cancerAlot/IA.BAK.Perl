@@ -56,7 +56,6 @@ EOF
     unless ( -e "NOMORE" ) {
         while ( stillhavespace() ) {
             my $newShard = randomnew();
-            print Dumper $newShard;
             unless ( length $newShard == 0 ) {
                 print
 "\nLooks like you still have free disk space, so I will continue to fill it up!\n(ctrl-c and touch NOMORE to prevent this behavior..)\n\n";
@@ -235,11 +234,8 @@ sub randomnew {
     my @existRepos;
     for (@active) {
         m/(.*?) /;
-        print "dollar1: $1\n";
         push @existRepos, $1 unless -d $1;
     }
-    print "Repos: \n";
-    print Dumper @repos;
     print "Existing Repos: \n";
     print Dumper @existRepos;
     return ( ( split " ", $existRepos[ rand @existRepos ] )[0] );
