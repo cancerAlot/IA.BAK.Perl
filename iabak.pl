@@ -205,7 +205,7 @@ sub checkoutshard {
 sub checkssh {
     my $repourl           = shift;    # f.e SHARD3@iabak.archiveteam.org:shard3
     my $uuid              = shift;    # generated id
-    my $registrationemail = shift;
+    my $registrationemail = shift;    # email-address
     unless ( -e "id_rsa" ) {
         system("ssh-keygen -q -P '' -t rsa -f ./id_rsa");
         chmod 600, "id_rsa";
@@ -214,6 +214,8 @@ sub checkssh {
     my $user = $1;
     my $dir  = $2;
     print "Checking ssh to server at $repourl...\n";
+    print Dumper $user;
+    print Dumper $dir;
     unless (
 `ssh -i id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no "$user" git-annex-shell -c configlist $dir`
       )
@@ -236,8 +238,6 @@ sub randomnew {
         m/(.*?) /;
         push @existRepos, $1 unless -d $1;
     }
-    print "Existing Repos: \n";
-    print Dumper @existRepos;
     return @existRepos ? ( ( split " ", $existRepos[ rand @existRepos ] )[0] ) : "";
 }
 
