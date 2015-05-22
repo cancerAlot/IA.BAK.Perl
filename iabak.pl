@@ -238,7 +238,7 @@ sub randomnew {
     }
     print "Existing Repos: \n";
     print Dumper @existRepos;
-    return ( ( split " ", $existRepos[ rand @existRepos ] )[0] );
+    return @existRepos ? ( ( split " ", $existRepos[ rand @existRepos ] )[0] ) : "";
 }
 
 sub handleshard {
