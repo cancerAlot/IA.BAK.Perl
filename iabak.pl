@@ -20,9 +20,7 @@ use File::Slurp;
 get("http://www.google.com") || die "Check your internet connection \n";
 $| = 1;
 
-$ENV{'PATH'} =
-    getcwd()
-  . ( $^O =~ /linux/ ? "/git-annex.linux:" : "/git-annex.osx:" )
+$ENV{'PATH'} = getcwd() . ( $^O =~ /linux/ ? "/git-annex.linux:" : "/git-annex.osx:" )
   . $ENV{'PATH'};
 my $NEED_PRERELEASE = 0;
 my $NUMCOPIES       = 4;
@@ -208,7 +206,7 @@ sub checkssh {
     my $registrationemail = shift;    # email-address
     unless ( -e "id_rsa" ) {
         system("ssh-keygen -q -P '' -t rsa -f ./id_rsa");
-        chmod 600, "id_rsa";
+        chmod "0600", "id_rsa";
     }
     $repourl =~ /^(.*?):(.*)$/;
     my $user = $1;
@@ -218,8 +216,7 @@ sub checkssh {
     print Dumper $dir;
     unless (
 `ssh -i id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no "$user" git-annex-shell -c configlist $dir`
-      )
-    {
+      ){
         print
 "Seem you're not set up yet for access to $repourl yet. Let's fix that..\n";
         register( $dir, $uuid, $registrationemail );
