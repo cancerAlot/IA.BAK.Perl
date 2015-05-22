@@ -237,7 +237,9 @@ sub randomnew {
         m/(.*?) /;
         push @existRepos, $1 unless -d $1;
     }
+    print "Repos: \n";
     print Dumper @repos;
+    print "Existing Repos: \n";
     print Dumper @existRepos;
     return ( ( split " ", $existRepos[ rand @existRepos ] )[0] );
 }
@@ -311,11 +313,7 @@ sub sharddir {
         push( @shards, "$_" ) if ( -d $_ );
     }
 
-<<<<<<< HEAD
 # sort takes a method for comparing $a and $b - ctime is compared and youngest directory comes first
-=======
-# sorts takes a method for comparing $a and $b - ctime is compared and youngest directory comes first
->>>>>>> refs/remotes/origin/master
     return ( sort { ( ( stat($a) )[10] ) > ( ( stat($b) )[10] ) } @shards );
 }
 
